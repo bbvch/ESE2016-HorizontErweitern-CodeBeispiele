@@ -1,8 +1,12 @@
-@for /r %%f in (*.go) do (
+setlocal EnableDelayedExpansion 
+
+@for /r %%f in (*.go) do @(
     @echo Processing %%~f
-    @go fmt "%%~f" || goto :gobuildfailed
-    @go build "%%~f" || goto :gobuildfailed
-    @py -3 -mpygments.cmdline -f img -o "%%~nf-go.png" "%%~f" || goto :gobuildfailed
+    @set filename=%%~nf
+    @REM Folienbeispiele sind nicht immer kompilierbar
+    @if NOT "!filename:~0,5!"=="folie" @go fmt "%%~f" || goto :gobuildfailed
+    @if NOT "!filename:~0,5!"=="folie" @go build "%%~f" || goto :gobuildfailed
+    @py -3 -mpygments.__init__ -f img -o "%%~nf-go.png" "%%~f" || goto :gobuildfailed
 )
 goto buildrust
 
@@ -13,10 +17,12 @@ goto buildrust
 goto end
 
 :buildrust
-@for /r %%f in (*.rs) do (
+@for /r %%f in (*.rs) do @(
     @echo Processing %%~f
-    @rustc "%%~f" || gogo :rustbuildfailed
-    @py -3 -mpygments.cmdline  -f img -o "%%~nf-rs.png" "%%f" || goto :rustbuildfailed
+    @set filename=%%~nf
+    @REM Folienbeispiele sind nicht immer kompilierbar
+    @if NOT "!filename:~0,5!"=="folie" @rustc "%%~f" || goto :rustbuildfailed
+    @py -3 -mpygments.__init__ -f img -o "%%~nf-rs.png" "%%f" || goto :rustbuildfailed
 )
 goto end
 
