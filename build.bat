@@ -6,7 +6,7 @@ setlocal EnableDelayedExpansion
     @REM Folienbeispiele sind nicht immer kompilierbar
     @if NOT "!filename:~0,5!"=="folie" @go fmt "%%~f" || goto :gobuildfailed
     @if NOT "!filename:~0,5!"=="folie" @go build "%%~f" || goto :gobuildfailed
-    @py -3 -mpygments.__init__ -f img -o "%%~nf-go.png" "%%~f" || goto :gobuildfailed
+    @py -3 -mpygments.__init__ -f img -O font_size=48 -o "%%~nf-go.png" "%%~f" || goto :gobuildfailed
 )
 goto buildrust
 
@@ -22,7 +22,7 @@ goto end
     @set filename=%%~nf
     @REM Folienbeispiele sind nicht immer kompilierbar
     @if NOT "!filename:~0,5!"=="folie" @rustc "%%~f" || goto :rustbuildfailed
-    @py -3 -mpygments.__init__ -f img -o "%%~nf-rs.png" "%%f" || goto :rustbuildfailed
+    @py -3 -mpygments.__init__ -f img -O font_size=48 -o "%%~nf-rs.png" "%%f" || goto :rustbuildfailed
 )
 goto end
 
